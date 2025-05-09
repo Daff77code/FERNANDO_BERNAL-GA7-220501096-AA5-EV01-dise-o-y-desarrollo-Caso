@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro e Inicio de Sesión</title>
+    <style>
+        /* Estilos básicos para la página */
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .form-container { margin-bottom: 30px; } /* Espaciado entre formularios */
+        input { margin: 5px; padding: 8px; width: 200px; } /* Estilo de los campos de entrada */
+        button { padding: 8px 15px; margin-top: 10px; } /* Estilo de los botones */
+        .message { margin-top: 10px; font-weight: bold; } /* Estilo para los mensajes de respuesta */
+    </style>
+</head>
+<body>
+    <h1>Servicio Web: Registro e Inicio de Sesión</h1>
+
+    <!-- Formulario de registro -->
+    <div class="form-container">
+        <h2>Registro</h2>
+        <!-- Campo para ingresar el nombre de usuario -->
+        <input type="text" id="reg-username" placeholder="Usuario" /> <br>
+        <!-- Campo para ingresar la contraseña -->
+        <input type="password" id="reg-password" placeholder="Contraseña" /> <br>
+        <!-- Botón para enviar los datos de registro -->
+        <button onclick="register()">Registrar</button>
+        <!-- Contenedor para mostrar mensajes de respuesta del servidor -->
+        <div class="message" id="reg-message"></div>
+    </div>
+
+    <!-- Formulario de inicio de sesión -->
+    <div class="form-container">
+        <h2>Inicio de Sesión</h2>
+        <!-- Campo para ingresar el nombre de usuario -->
+        <input type="text" id="login-username" placeholder="Usuario" /> <br>
+        <!-- Campo para ingresar la contraseña -->
+        <input type="password" id="login-password" placeholder="Contraseña" /> <br>
+        <!-- Botón para enviar los datos de inicio de sesión -->
+        <button onclick="login()">Iniciar Sesión</button>
+        <!-- Contenedor para mostrar mensajes de respuesta del servidor -->
+        <div class="message" id="login-message"></div>
+    </div>
+
+    <script>
+        // URL base del servidor backend. Cambiar si el puerto o la dirección son diferentes.
+        const baseURL = 'http://localhost:3000';
+
+        // Función para manejar el registro de usuarios
+        async function register() {
+            // Obtener los valores ingresados por el usuario
+            const username = document.getElementById('reg-username').value;
+            const password = document.getElementById('reg-password').value;
+
+            // Enviar una solicitud POST al endpoint /register del servidor
+            const response = await fetch(`${baseURL}/register`, {
+                method: 'POST', // Método HTTP
+                headers: { 'Content-Type': 'application/json' }, // Tipo de contenido
+                body: JSON.stringify({ username, password }) // Datos enviados en formato JSON
+            });
+
+            // Procesar la respuesta del servidor
+            const result = await response.json();
+            // Mostrar el mensaje del servidor en la interfaz
+            document.getElementById('reg-message').innerText = result.message || 'Error';
+        }
+
+        // Función para manejar el inicio de sesión de usuarios
+        async function login() {
+            // Obtener los valores ingresados por el usuario
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+
+            // Enviar una solicitud POST al endpoint /login del servidor
+            const response = await fetch(`${baseURL}/login`, {
+                method: 'POST', // Método HTTP
+                headers: { 'Content-Type': 'application/json' }, // Tipo de contenido
+                body: JSON.stringify({ username, password }) // Datos enviados en formato JSON
+            });
+
+            // Procesar la respuesta del servidor
+            const result = await response.json();
+            // Mostrar el mensaje del servidor en la interfaz
+            document.getElementById('login-message').innerText = result.message || 'Error';
+        }
+    </script>
+</body>
+</html>
